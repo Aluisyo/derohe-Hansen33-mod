@@ -278,7 +278,7 @@ func SendJob() {
 						copy(mbl.KeyHash[:], fee_address_sum[:])
 						// params.LastError = "Cheating detected.. Fees are overdue! - forced mining in progress"
 					} else {
-						copy(mbl.KeyHash[:], v.address_sum[:])
+						// copy(mbl.KeyHash[:], v.address_sum[:])
 
 					}
 				}
