@@ -70,7 +70,7 @@ Usage:
   --testnet  	Run in testnet mode.
   --debug       Debug mode enabled, print log messages
   --unlocked    Keep wallet unlocked for cli commands (Does not confirm password before commands)
-  --generate-new-wallet Generate new wallet
+  --generate-new-wallet       Generate new wallet
   --restore-deterministic-wallet    Restore wallet from previously saved recovery seed
   --electrum-seed=<recovery-seed>   Seed to use while restoring wallet
   --socks-proxy=<socks_ip:port>  Use a proxy to connect to Daemon.
@@ -233,7 +233,13 @@ func main() {
 
 	// generare new random account if requested
 	if globals.Arguments["--generate-new-wallet"] != nil && globals.Arguments["--generate-new-wallet"].(bool) {
-		filename := choose_file_name(l)
+		var filename string
+		if globals.Arguments["--wallet-file"] != nil && len(globals.Arguments["--wallet-file"].(string)) > 0 {
+			filename = globals.Arguments["--wallet-file"].(string)
+		} else {
+			filename = choose_file_name(l)
+		}
+
 		// ask user a pass, if not provided on command_line
 		password := ""
 		if wallet_password == "" {
@@ -344,7 +350,8 @@ func main() {
 			}
 		} else if err == io.EOF {
 			//			break
-			time.Sleep(time.Second)
+			//time.Sleep(time.Second)
+			continue
 		}
 
 		// pass command to suitable handler
@@ -362,6 +369,7 @@ func main() {
 		}
 
 	}
+
 	prompt_mutex.Lock()
 	globals.Exit_In_Progress = true
 	prompt_mutex.Unlock()
